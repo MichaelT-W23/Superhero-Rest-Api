@@ -35,7 +35,7 @@ public class SuperheroService {
         Superhero existingSuperhero = superheroRepository.findByName(superheroDTO.getName());
 
         // Check if the superhero already exists for the user
-        if (existingSuperhero != null && userSuperheroRepository.existsByUserIdAndSuperheroId(userId, existingSuperhero.getSuperId())) {
+        if (existingSuperhero != null) {
             throw new DuplicateSuperheroException("Superhero already exists for this user!");
         }
 

@@ -34,7 +34,12 @@ public class S3ImageService {
 
 
     public InputStream getImageBySuperhero(Long superId) {
-        Image image = imageRepository.findBySuperId(superId);
+        // Image image = imageRepository.findBySuperId(superId);
+        Superhero superhero = superheroRepository.findById(superId)
+                .orElseThrow(() -> new RuntimeException("Superhero not found with ID: " + superId));
+
+        // Find the Image associated with the Superhero
+        Image image = imageRepository.findBySuperhero(superhero);
 
         if (image == null) {
             throw new RuntimeException("Image not found for superhero ID: " + superId);
