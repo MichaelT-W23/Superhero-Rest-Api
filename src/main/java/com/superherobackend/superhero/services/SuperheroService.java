@@ -2,9 +2,19 @@ package com.superherobackend.superhero.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.superherobackend.superhero.dto.SuperheroDTO;
+import com.superherobackend.superhero.models.Power;
 import com.superherobackend.superhero.models.Superhero;
+import com.superherobackend.superhero.models.User;
+import com.superherobackend.superhero.models.UserSuperhero;
+import com.superherobackend.superhero.repositories.PowerRepository;
 import com.superherobackend.superhero.repositories.SuperheroRepository;
+import com.superherobackend.superhero.repositories.UserRepository;
+import com.superherobackend.superhero.repositories.UserSuperheroRepository;
+import com.superherobackend.superhero.exceptions.DuplicateSuperheroException;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class SuperheroService {
@@ -12,19 +22,46 @@ public class SuperheroService {
     @Autowired
     private SuperheroRepository superheroRepository;
 
-    public Superhero addNewSuperhero(String name, String realName, String universe, int yearCreated) {
-        Superhero existingSuperhero = superheroRepository.findByName(name);
+    @Autowired
+    private PowerRepository powerRepository;
 
-        if (existingSuperhero != null) {
-            throw new RuntimeException("Superhero with name '" + name + "' already exists.");
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserSuperheroRepository userSuperheroRepository;
+
+    public Superhero addNewSuperhero(SuperheroDTO superheroDTO, Long userId) throws DuplicateSuperheroException {
+        Superhero existingSuperhero = superheroRepository.findByName(superheroDTO.getName());
+
+        // Check if the superhero already exists for the user
+        if (existingSuperhero != null && userSuperheroRepository.existsByUserIdAndSuperheroId(userId, existingSuperhero.getSuperId())) {
+            throw new DuplicateSuperheroException("Superhero already exists for this user!");
         }
 
-        Superhero superhero = new Superhero();
-        superhero.setName(name);
-        superhero.setRealName(realName);
-        superhero.setUniverse(universe);
-        superhero.setYearCreated(yearCreated);
+        // Create the new superhero if not found
+        Superhero superhero = existingSuperhero != null ? existingSuperhero : new Superhero();
+        superhero.setName(superheroDTO.getName());
+        superhero.setRealName(superheroDTO.getRealName());
+        superhero.setUniverse(superheroDTO.getUniverse());
+        superhero.setYearCreated(superheroDTO.getYearCreated());
 
-        return superheroRepository.save(superhero);
+        // Fetch and assign powers
+        Set<Power> powers = new HashSet<>();
+        powerRepository.findAllById(superheroDTO.getPowerIds()).forEach(powers::add);
+        superhero.setPowers(powers);
+
+        Superhero savedSuperhero = superheroRepository.save(superhero);
+
+        // Associate the superhero with the user
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        UserSuperhero userSuperhero = new UserSuperhero();
+        userSuperhero.setUser(user);
+        userSuperhero.setSuperhero(savedSuperhero);
+        userSuperheroRepository.save(userSuperhero);
+
+        return savedSuperhero;
     }
 }

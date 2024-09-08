@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.superherobackend.superhero.dto.UserDTO;
 import com.superherobackend.superhero.models.User;
 import com.superherobackend.superhero.models.UserAddRequest;
 import com.superherobackend.superhero.models.UserAuthRequest;
-import com.superherobackend.superhero.models.UserDTO;
 import com.superherobackend.superhero.services.UserService;
 
 

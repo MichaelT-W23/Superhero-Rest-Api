@@ -47,13 +47,12 @@ public class S3ImageService {
 
         return s3Client.getObject(getObjectRequest);
     }
-    
-    
+
+
     public void uploadImage(Long superId, MultipartFile file) throws Exception {
         String originalFilename = file.getOriginalFilename();
-        
-        String fileExtension = "";
 
+        String fileExtension = "";
         if (originalFilename != null && originalFilename.contains(".")) {
             fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
         }
@@ -68,7 +67,7 @@ public class S3ImageService {
         s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
         Superhero superhero = superheroRepository.findById(superId)
-            .orElseThrow(() -> new RuntimeException("Superhero not found with ID: " + superId));
+                .orElseThrow(() -> new RuntimeException("Superhero not found with ID: " + superId));
 
         Image image = new Image();
         image.setOriginalFilename(originalFilename);

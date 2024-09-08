@@ -1,4 +1,6 @@
-package com.superherobackend.superhero.models;
+package com.superherobackend.superhero.dto;
+
+import com.superherobackend.superhero.models.User;
 
 import lombok.Data;
 
