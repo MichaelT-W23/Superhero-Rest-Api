@@ -15,12 +15,16 @@ public interface UserSuperheroRepository extends CrudRepository<UserSuperhero, L
     @Query("SELECT s FROM Superhero s JOIN UserSuperhero us ON s.superId = us.superhero.superId WHERE us.user.userId = :userId")
     List<Superhero> findAllSuperheroesByUserId(Long userId);
 
+
     @Query("SELECT s FROM Superhero s JOIN UserSuperhero us ON s.superId = us.superhero.superId WHERE us.user.userId = :userId AND s.universe = :universe")
     List<Superhero> findSuperheroesByUserIdAndUniverse(Long userId, String universe);
 
+
     boolean existsByUserUserIdAndSuperheroSuperId(Long userId, Long superheroId);
+    
+    void deleteBySuperhero_SuperId(Long superId);
 
-
+    
     @Query("SELECT us.superhero FROM UserSuperhero us JOIN us.superhero.powers p WHERE us.user.userId = :userId AND p.powerId = :powerId")
     List<Superhero> findSuperheroesByUserIdAndPower(Long userId, Long powerId);
 }

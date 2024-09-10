@@ -10,8 +10,10 @@ import java.io.Serializable;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name = "Images")
+@Table(name = "images")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -32,6 +34,7 @@ public class Image implements Serializable {
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "super_id", referencedColumnName = "super_id", unique = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Superhero superhero;
 
 }

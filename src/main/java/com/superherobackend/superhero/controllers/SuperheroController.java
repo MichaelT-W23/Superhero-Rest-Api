@@ -1,6 +1,7 @@
 package com.superherobackend.superhero.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,25 +22,48 @@ public class SuperheroController {
 
     @PostMapping("/users/{userId}/superheroes/add")
     public ResponseEntity<?> addNewSuperhero(@PathVariable Long userId,
-                                                    @RequestParam String name,
-                                                    @RequestParam String realName,
-                                                    @RequestParam String universe,
-                                                    @RequestParam int yearCreated,
-                                                    @RequestParam List<Long> powerIds,
-                                                    @RequestParam MultipartFile image) {
+                                             @RequestParam String name,
+                                             @RequestParam String realName,
+                                             @RequestParam String universe,
+                                             @RequestParam int yearCreated,
+                                             @RequestParam List<Long> powerIds,
+                                             @RequestParam MultipartFile image) {
 
-        SuperheroDTO superheroDTO = new SuperheroDTO(name, realName, universe, yearCreated, powerIds, image);
+        SuperheroDTO superheroDTO = new SuperheroDTO(name, realName, universe, yearCreated, powerIds);
 
         Superhero superhero = null;
 
         try {
-            superhero = superheroService.addNewSuperhero(superheroDTO, userId);
+            superhero = superheroService.addNewSuperhero(superheroDTO, userId, image);
             return ResponseEntity.ok(superhero);
         } catch (DuplicateSuperheroException e) {
             return ResponseEntity.status(409).body("Superhero already exists for this user.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
         }
-
     }
-    
+
+    @GetMapping("/max-id")
+    public ResponseEntity<Long> getMaxSuperId() {
+        try {
+            Long maxSuperId = superheroService.getMaxSuperId();
+            return ResponseEntity.ok(maxSuperId);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body(null);
+        }
+    }
+
+    @DeleteMapping("/{superId}")
+    public ResponseEntity<String> deleteSuperhero(@PathVariable Long superId) {
+        try {
+            superheroService.deleteSuperhero(superId);
+            return ResponseEntity.ok("Superhero and all references deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body("Error deleting superhero: " + e.getMessage());
+        }
+    }
+
 }
 

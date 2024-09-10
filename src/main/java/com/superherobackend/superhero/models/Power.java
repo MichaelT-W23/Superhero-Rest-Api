@@ -9,6 +9,8 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "Powers")
 @Getter
@@ -26,6 +28,8 @@ public class Power implements Serializable {
     private String name;
 
     @ManyToMany(mappedBy = "powers", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Superhero> superheroes;
+    
 }
 

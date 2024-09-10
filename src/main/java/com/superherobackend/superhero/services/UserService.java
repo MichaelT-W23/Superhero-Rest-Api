@@ -38,5 +38,16 @@ public class UserService {
         userRepository.save(user);
     }
     
+    public Long getMaxUserId() {
+        return userRepository.findMaxUserId();
+    }
+
+    public void deleteUserById(Long userId) {
+        if (userRepository.existsById(userId)) {
+            userRepository.deleteById(userId);
+        } else {
+            throw new RuntimeException("User not found");
+        }
+    }
 
 }

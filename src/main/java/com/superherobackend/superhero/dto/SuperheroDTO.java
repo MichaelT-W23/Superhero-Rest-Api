@@ -20,4 +20,12 @@ public class SuperheroDTO {
     private int yearCreated;
     private List<Long> powerIds;
     private MultipartFile image;
+
+    public SuperheroDTO(String name, String realName, String universe, int yearCreated, List<Long> powerIds) {
+        this.name = name;
+        this.realName = realName;
+        this.universe = universe;
+        this.yearCreated = yearCreated;
+        this.powerIds = powerIds;
+    }
 }
