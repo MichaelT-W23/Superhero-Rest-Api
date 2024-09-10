@@ -53,12 +53,13 @@ tasks.named('test') {
 }
 
 // Add these at the bottom
-application {
-    mainClassName = 'com.superherobackend.superhero.SuperheroApplication'
-}
+// application {
+//     mainClassName = 'com.superherobackend.superhero.SuperheroApplication'
+// }
 
-task runScript(type: Exec) {
-    commandLine 'sh', './start.sh'
-}
+// task runScript(type: Exec) {
+//     commandLine 'sh', './start.sh'
+// 	ignoreExitValue = true
+// }
 
-run.dependsOn runScript
+// run.dependsOn runScript
