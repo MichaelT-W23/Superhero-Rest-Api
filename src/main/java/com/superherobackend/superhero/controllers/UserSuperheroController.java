@@ -1,6 +1,7 @@
 package com.superherobackend.superhero.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,12 @@ public class UserSuperheroController {
         return ResponseEntity.ok(superheroes);
     }
 
+    @GetMapping("/superheroes/{superId}")
+    public ResponseEntity<Superhero> getSuperheroById(@PathVariable Long superId) {
+        Optional<Superhero> superhero = userSuperheroRepository.findSuperheroById(superId);
+        return superhero.map(ResponseEntity::ok)
+                        .orElse(ResponseEntity.notFound().build());
+    }
 
     @GetMapping("/users/{userId}/superheroes/universe")
     public ResponseEntity<List<Superhero>> getUserSuperheroesByUniverse(@PathVariable Long userId, @RequestParam String universe) {

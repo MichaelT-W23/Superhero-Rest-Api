@@ -20,6 +20,7 @@ import com.superherobackend.superhero.repositories.UserSuperheroRepository;
 
 import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
 
 @Service
 public class SuperheroService {
@@ -41,7 +42,11 @@ public class SuperheroService {
 
     @Autowired
     private S3ImageService s3ImageService;
-
+    
+    public List<Superhero> getAllSuperheroes() {
+        return superheroRepository.findAllSuperheroes();
+    }
+    
     @Transactional 
     public Superhero addNewSuperhero(SuperheroDTO superheroDTO, Long userId, MultipartFile image) throws Exception {
 

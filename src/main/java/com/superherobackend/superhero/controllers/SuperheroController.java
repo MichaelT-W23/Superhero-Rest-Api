@@ -20,6 +20,12 @@ public class SuperheroController {
     @Autowired
     private SuperheroService superheroService;
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Superhero>> getAllSuperheroes() {
+        List<Superhero> superheroes = superheroService.getAllSuperheroes();
+        return ResponseEntity.ok(superheroes);
+    }
+    
     @PostMapping("/users/{userId}/superheroes/add")
     public ResponseEntity<?> addNewSuperhero(@PathVariable Long userId,
                                              @RequestParam String name,

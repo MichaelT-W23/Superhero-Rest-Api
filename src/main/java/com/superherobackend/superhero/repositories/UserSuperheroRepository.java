@@ -8,13 +8,16 @@ import com.superherobackend.superhero.models.Superhero;
 import com.superherobackend.superhero.models.UserSuperhero;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserSuperheroRepository extends CrudRepository<UserSuperhero, Long> {
-
+    
     @Query("SELECT s FROM Superhero s JOIN UserSuperhero us ON s.superId = us.superhero.superId WHERE us.user.userId = :userId")
     List<Superhero> findAllSuperheroesByUserId(Long userId);
 
+    @Query("SELECT s FROM Superhero s WHERE s.superId = :superId")
+    Optional<Superhero> findSuperheroById(Long superId);
 
     @Query("SELECT s FROM Superhero s JOIN UserSuperhero us ON s.superId = us.superhero.superId WHERE us.user.userId = :userId AND s.universe = :universe")
     List<Superhero> findSuperheroesByUserIdAndUniverse(Long userId, String universe);

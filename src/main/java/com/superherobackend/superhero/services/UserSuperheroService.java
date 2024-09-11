@@ -1,6 +1,7 @@
 package com.superherobackend.superhero.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,5 +17,9 @@ public class UserSuperheroService {
 
     public List<Superhero> getAllSuperheroesByUserId(Long userId) {
         return userSuperheroRepository.findAllSuperheroesByUserId(userId);
+    }
+
+    public Optional<Superhero> getSuperheroById(Long superId) {
+        return userSuperheroRepository.findSuperheroById(superId);
     }
 }
