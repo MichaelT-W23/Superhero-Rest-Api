@@ -35,6 +35,9 @@ public class Superhero implements Serializable {
     @Column(name = "year_created")
     private Integer yearCreated;
 
+    @Column(name = "can_delete")
+    private Boolean canDelete;
+
     @OneToOne(mappedBy = "superhero", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
     private Image image;
 

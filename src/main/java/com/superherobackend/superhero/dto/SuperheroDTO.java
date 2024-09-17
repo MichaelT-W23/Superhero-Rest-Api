@@ -18,14 +18,16 @@ public class SuperheroDTO {
     private String realName;
     private String universe;
     private int yearCreated;
+    private Boolean canDelete;
     private List<Long> powerIds;
     private MultipartFile image;
 
-    public SuperheroDTO(String name, String realName, String universe, int yearCreated, List<Long> powerIds) {
+    public SuperheroDTO(String name, String realName, String universe, int yearCreated, Boolean canDelete, List<Long> powerIds) {
         this.name = name;
         this.realName = realName;
         this.universe = universe;
         this.yearCreated = yearCreated;
+        this.canDelete = canDelete;
         this.powerIds = powerIds;
     }
 }

@@ -62,6 +62,7 @@ public class SuperheroService {
         superhero.setRealName(superheroDTO.getRealName());
         superhero.setUniverse(superheroDTO.getUniverse());
         superhero.setYearCreated(superheroDTO.getYearCreated());
+        superhero.setCanDelete(superheroDTO.getCanDelete());
 
         // Fetch and set powers
         Set<Power> powers = new HashSet<>();
@@ -108,6 +109,9 @@ public class SuperheroService {
         return savedSuperhero;
     }
 
+    public List<Superhero> getSuperheroesByPower(Long powerId) {
+        return superheroRepository.findByPowerId(powerId);
+    }
 
     @Transactional
     public void deleteSuperhero(Long superId) {

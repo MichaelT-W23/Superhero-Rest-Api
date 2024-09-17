@@ -27,7 +27,8 @@ public interface UserSuperheroRepository extends CrudRepository<UserSuperhero, L
     
     void deleteBySuperhero_SuperId(Long superId);
 
-    
+    void deleteByUserUserIdAndSuperheroSuperId(Long userId, Long superheroId);
+
     @Query("SELECT us.superhero FROM UserSuperhero us JOIN us.superhero.powers p WHERE us.user.userId = :userId AND p.powerId = :powerId")
     List<Superhero> findSuperheroesByUserIdAndPower(Long userId, Long powerId);
 }

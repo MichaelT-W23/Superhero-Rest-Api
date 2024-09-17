@@ -32,10 +32,11 @@ public class SuperheroController {
                                              @RequestParam String realName,
                                              @RequestParam String universe,
                                              @RequestParam int yearCreated,
+                                             @RequestParam Boolean canDelete,
                                              @RequestParam List<Long> powerIds,
                                              @RequestParam MultipartFile image) {
 
-        SuperheroDTO superheroDTO = new SuperheroDTO(name, realName, universe, yearCreated, powerIds);
+        SuperheroDTO superheroDTO = new SuperheroDTO(name, realName, universe, yearCreated, canDelete, powerIds);
 
         Superhero superhero = null;
 
@@ -58,6 +59,12 @@ public class SuperheroController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                                  .body(null);
         }
+    }
+
+    @GetMapping("/power/{powerId}")
+    public ResponseEntity<List<Superhero>> getSuperheroesByPower(@PathVariable Long powerId) {
+        List<Superhero> superheroes = superheroService.getSuperheroesByPower(powerId);
+        return ResponseEntity.ok(superheroes);
     }
 
     @DeleteMapping("/{superId}")

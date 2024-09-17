@@ -19,6 +19,9 @@ public interface SuperheroRepository extends CrudRepository<Superhero, Long> {
     @Query("SELECT s FROM Superhero s JOIN UserSuperhero us ON s.superId = us.superhero.superId WHERE s.name = :name AND us.user.userId = :userId")
     Superhero findByNameAndUserId(@Param("name") String name, @Param("userId") Long userId);
     
+    @Query("SELECT s FROM Superhero s JOIN s.powers p WHERE p.powerId = :powerId")
+    List<Superhero> findByPowerId(@Param("powerId") Long powerId);
+
     @Query("SELECT MAX(s.superId) FROM Superhero s")
     Long findMaxSuperId();
 }

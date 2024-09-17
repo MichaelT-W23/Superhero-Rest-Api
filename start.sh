@@ -13,22 +13,31 @@ kill_port_8080() {
   fi
 }
 
-
 stop_spring_boot() {
   echo "\n\n${YELLOW}Spring Boot application finished successfully! Stopping Spring Boot...${NC}"
   kill "$SPRING_BOOT_PID" 2>/dev/null
-
   kill_port_8080
 }
 
-# Handles control + c (SIGINT)/termination (SIGTERM)
+monitor_parent_process() {
+  while kill -0 "$PPID" >/dev/null 2>&1; do
+    sleep 1
+  done
+  
+  stop_spring_boot
+}
+
+# Handles control + c (SIGINT) and termination (SIGTERM)
 trap stop_spring_boot INT TERM
 
 kill_port_8080
 
-# Runs the Gradle bootRun task in the background
+# Runs Gradle bootRun task in the background
 ./gradlew --quiet bootRun &
 SPRING_BOOT_PID=$!
+
+# Start monitoring parent process in the background
+monitor_parent_process &
 
 sleep 0.1
 

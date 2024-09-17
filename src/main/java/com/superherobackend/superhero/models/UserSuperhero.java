@@ -2,12 +2,14 @@ package com.superherobackend.superhero.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "User_Superheroes")
 @Getter
 @Setter
+@NoArgsConstructor
 public class UserSuperhero {
 
     @Id
@@ -22,4 +24,9 @@ public class UserSuperhero {
     @JoinColumn(name = "super_id")
     private Superhero superhero;
 
+    public UserSuperhero(User user, Superhero superhero) {
+        this.user = user;
+        this.superhero = superhero;
+    }
+    
 }
