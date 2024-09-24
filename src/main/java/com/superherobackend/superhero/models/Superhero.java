@@ -38,7 +38,12 @@ public class Superhero implements Serializable {
     @Column(name = "can_delete")
     private Boolean canDelete;
 
-    @OneToOne(mappedBy = "superhero", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    @OneToOne(
+        mappedBy = "superhero", 
+        cascade = CascadeType.ALL, 
+        fetch = FetchType.LAZY, 
+        optional = true
+    )
     private Image image;
 
     @ManyToMany(fetch = FetchType.LAZY)

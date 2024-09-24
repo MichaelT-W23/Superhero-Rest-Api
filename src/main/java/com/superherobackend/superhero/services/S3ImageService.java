@@ -1,6 +1,5 @@
 package com.superherobackend.superhero.services;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -69,16 +68,17 @@ public class S3ImageService {
         Image existingImage = imageRepository.findBySuperhero(superhero);
         
         if (existingImage != null) {
-            // Update the existing image
             existingImage.setOriginalFilename(originalFilename);
             existingImage.setStoredFilename(storedFilename);
             imageRepository.save(existingImage);
         } else {
-            // Save a new image if the image doesn't exist
+            // Create a new image if the image doesn't exist
             Image newImage = new Image();
+
             newImage.setOriginalFilename(originalFilename);
             newImage.setStoredFilename(storedFilename);
             newImage.setSuperhero(superhero);
+
             imageRepository.save(newImage);
         }
     

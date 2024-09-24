@@ -52,14 +52,10 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-// Add these at the bottom
-// application {
-//     mainClassName = 'com.superherobackend.superhero.SuperheroApplication'
+// test {
+//     reports {
+//         junitXml.required.set(true) // This enables XML reports
+//         html.required.set(true)     // This enables HTML reports
+//     }
 // }
 
-// task runScript(type: Exec) {
-//     commandLine 'sh', './start.sh'
-// 	ignoreExitValue = true
-// }
-
-// run.dependsOn runScript

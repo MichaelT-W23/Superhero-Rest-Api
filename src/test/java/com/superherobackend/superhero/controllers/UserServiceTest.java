@@ -29,15 +29,13 @@ public class UserServiceTest {
 
     @Test
     public void testGetUserByUsername() {
-        // Arrange
+        
         String username = "john_doe";
         User mockUser = new User(1L, "John Doe", username, "hashed_password");
         when(userRepository.findByUsername(username)).thenReturn(mockUser);
 
-        // Act
         User result = userService.getUserByUsername(username);
 
-        // Assert
         assertEquals(mockUser, result);
         verify(userRepository).findByUsername(username);
     }

@@ -58,13 +58,14 @@ public class SuperheroService {
 
         // Create the new superhero if not found
         Superhero superhero = new Superhero();
+
         superhero.setName(superheroDTO.getName());
         superhero.setRealName(superheroDTO.getRealName());
         superhero.setUniverse(superheroDTO.getUniverse());
         superhero.setYearCreated(superheroDTO.getYearCreated());
         superhero.setCanDelete(superheroDTO.getCanDelete());
 
-        // Fetch and set powers
+        // Set the powers for the superhero
         Set<Power> powers = new HashSet<>();
         powerRepository.findAllById(superheroDTO.getPowerIds()).forEach(powers::add);
         superhero.setPowers(powers);
@@ -72,19 +73,17 @@ public class SuperheroService {
         // Save the new superhero 
         Superhero savedSuperhero = superheroRepository.save(superhero);
 
-        // Upload Image
+        // Upload Image to S3 bucket
         String storedFilename = s3ImageService.uploadImage(savedSuperhero.getSuperId(), image); // Upload image to S3 and get stored filename
 
         // Check if an image already exists for the superhero
         Image existingImage = imageRepository.findBySuperhero(savedSuperhero);
         
         if (existingImage != null) {
-            // Update the existing image
             existingImage.setOriginalFilename(image.getOriginalFilename());
             existingImage.setStoredFilename(storedFilename);
             imageRepository.save(existingImage);
         } else {
-            // Save the new image metadata if no image exists
             Image newImage = new Image();
             newImage.setOriginalFilename(image.getOriginalFilename());
             newImage.setStoredFilename(storedFilename);
@@ -93,7 +92,7 @@ public class SuperheroService {
             savedSuperhero.setImage(newImage);
         }
 
-        // Associate the superhero with the user
+        // Create the association between the superhero and the user.
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
 
@@ -123,13 +122,13 @@ public class SuperheroService {
             s3ImageService.deleteImage(storedFilename);
         }
 
-        // Remove the image record from the Images table
+        // Delete the image data from the Images table
         imageRepository.deleteBySuperheroSuperId(superId);
 
-        // Remove all associations with the user (Many-to-Many relationship)
+        // Remove all associations the superheros has with users
         userSuperheroRepository.deleteBySuperhero_SuperId(superId);
 
-        // Remove the superhero and its powers (handled by ON DELETE CASCADE in DB)
+        // Delete the superhero and their powers (ON DELETE CASCADE)
         superheroRepository.deleteById(superId);
     }
 

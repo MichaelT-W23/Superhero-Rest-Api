@@ -10,9 +10,8 @@ public class AwsS3Config {
 
     @Bean
     public S3Client s3Client() {
-        // You can customize this based on your region and credentials
         return S3Client.builder()
-                .region(Region.US_EAST_1)  // Set your preferred AWS region here
+                .region(Region.US_EAST_1)
                 .build();
     }
 }
