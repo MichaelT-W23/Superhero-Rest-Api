@@ -1,14 +1,18 @@
 package com.superherobackend.superhero.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.superherobackend.superhero.dto.UserDTO;
 import com.superherobackend.superhero.models.User;
 import com.superherobackend.superhero.models.UserAddRequest;
 import com.superherobackend.superhero.models.UserAuthRequest;
+import com.superherobackend.superhero.security.AuthenticationResponse;
 import com.superherobackend.superhero.services.UserService;
 
 @RestController
@@ -17,6 +21,18 @@ public class UserController {
     
     @Autowired
     private UserService userService;
+
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('Admin')")
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+
+        if (users != null) {
+            return ResponseEntity.ok(users);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 
     @GetMapping("/{username}")
     public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) {
@@ -30,26 +46,25 @@ public class UserController {
         }
     }
 
-
     @PostMapping("/authenticate")
-    public ResponseEntity<UserDTO> authenticateUser(@RequestBody UserAuthRequest request) {
-        User authenticatedUser = userService.authenticate(request.getUsername(), request.getPassword());
-        
-        if (authenticatedUser != null) {
-            UserDTO userDTO = new UserDTO(authenticatedUser);
-            return ResponseEntity.ok(userDTO);
+    public ResponseEntity<AuthenticationResponse> authenticateUser(@RequestBody UserAuthRequest request) {
+        AuthenticationResponse response = userService.authenticateUser(request.getUsername(), request.getPassword());
+
+        if (response != null) {
+            return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<String> addUser(@RequestBody UserAddRequest request) {
+    @PostMapping("/create")
+    public ResponseEntity<String> createUser(@RequestBody UserAddRequest request) {
         userService.addUser(request.getName(), request.getUsername(), request.getPassword());
-        return ResponseEntity.status(HttpStatus.CREATED).body("User added successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<String> deleteUserById(@PathVariable Long id) {
         try {
             userService.deleteUserById(id);

@@ -35,13 +35,9 @@ public class SuperheroController {
                                              @RequestParam Boolean canDelete,
                                              @RequestParam List<Long> powerIds,
                                              @RequestParam MultipartFile image) {
-
-        SuperheroDTO superheroDTO = new SuperheroDTO(name, realName, universe, yearCreated, canDelete, powerIds);
-
-        Superhero superhero = null;
-
         try {
-            superhero = superheroService.addNewSuperhero(superheroDTO, userId, image);
+            SuperheroDTO superheroDTO = new SuperheroDTO(name, realName, universe, yearCreated, canDelete, powerIds);
+            Superhero superhero = superheroService.addNewSuperhero(superheroDTO, userId, image);
             return ResponseEntity.ok(superhero);
         } catch (DuplicateSuperheroException e) {
             return ResponseEntity.status(409).body("Superhero already exists for this user.");
@@ -77,6 +73,6 @@ public class SuperheroController {
                                  .body("Error deleting superhero: " + e.getMessage());
         }
     }
-
+    
 }
 

@@ -31,7 +31,7 @@ public class UserServiceTest {
     public void testGetUserByUsername() {
         
         String username = "john_doe";
-        User mockUser = new User(1L, "John Doe", username, "hashed_password");
+        User mockUser = new User(1L, "John Doe", "User", username, "hashed_password");
         when(userRepository.findByUsername(username)).thenReturn(mockUser);
 
         User result = userService.getUserByUsername(username);
