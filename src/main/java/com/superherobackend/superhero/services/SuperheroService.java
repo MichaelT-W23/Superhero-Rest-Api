@@ -78,16 +78,25 @@ public class SuperheroService {
         // Save the new superhero in db
         Superhero savedSuperhero = superheroRepository.save(superhero);
 
-        // Upload Image to S3 bucket
+        // Connect image with superhero
         String storedFilename = s3ImageService.uploadImage(savedSuperhero.getSuperId(), image);
 
-        // Connect image with superhero
-        Image newImage = new Image();
-        newImage.setOriginalFilename(image.getOriginalFilename());
-        newImage.setStoredFilename(storedFilename);
-        newImage.setSuperhero(savedSuperhero);
-        imageRepository.save(newImage);
-        savedSuperhero.setImage(newImage);
+
+        // Check if an image already exists for the superhero
+        Image existingImage = imageRepository.findBySuperhero(savedSuperhero);
+        
+        if (existingImage != null) {
+            existingImage.setOriginalFilename(image.getOriginalFilename());
+            existingImage.setStoredFilename(storedFilename);
+            imageRepository.save(existingImage);
+        } else {
+            Image newImage = new Image();
+            newImage.setOriginalFilename(image.getOriginalFilename());
+            newImage.setStoredFilename(storedFilename);
+            newImage.setSuperhero(savedSuperhero);
+            imageRepository.save(newImage);
+            savedSuperhero.setImage(newImage);
+        }
 
         // Create the association between the superhero and user
         User user = userRepository.findById(userId)

@@ -72,7 +72,10 @@ public class SecurityConfig {
             }))
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/users/authenticate", "/api/users/create").permitAll()
+                .requestMatchers(
+                    "/api/users/authenticate", 
+                    "/api/users/create"
+                ).permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
