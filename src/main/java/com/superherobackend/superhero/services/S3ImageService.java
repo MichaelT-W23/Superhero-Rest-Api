@@ -1,6 +1,7 @@
 package com.superherobackend.superhero.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,7 +29,8 @@ public class S3ImageService {
     @Autowired
     private S3Client s3Client;
 
-    private final String BUCKET_NAME = "superhero-pics";
+    @Value("${s3.superhero.bucket}")
+    private String bucketName;
     
 
     public String getImageFilenameBySuperhero(Long superId) {
@@ -56,7 +58,7 @@ public class S3ImageService {
         String storedFilename = UUID.randomUUID().toString().replace("-", "") + "." + fileExtension;
     
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                .bucket(BUCKET_NAME)
+                .bucket(bucketName)
                 .key(storedFilename)
                 .build();
     
@@ -87,7 +89,7 @@ public class S3ImageService {
 
     public void deleteImage(String storedFilename) {
         DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
-                .bucket(BUCKET_NAME)
+                .bucket(bucketName)
                 .key(storedFilename)
                 .build();
 
@@ -95,4 +97,3 @@ public class S3ImageService {
     }
 
 }
-
