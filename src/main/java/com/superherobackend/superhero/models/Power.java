@@ -12,7 +12,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "Powers")
+@Table(name = "powers")
 @Getter
 @Setter
 @NoArgsConstructor

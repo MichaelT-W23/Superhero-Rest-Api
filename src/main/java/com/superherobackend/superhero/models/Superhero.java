@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-@Table(name = "Superheroes")
+@Table(name = "superheroes")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -48,7 +48,7 @@ public class Superhero implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "Superhero_Powers",
+        name = "superhero_powers",
         joinColumns = @JoinColumn(name = "super_id"),
         inverseJoinColumns = @JoinColumn(name = "power_id")
     )
