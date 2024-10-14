@@ -75,7 +75,7 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/api/users/authenticate", 
                     "/api/users/create",
-                    "/hello"
+                    "/"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
