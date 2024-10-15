@@ -26,7 +26,7 @@ public class UserService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public List<User> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         return userRepository.fetchAllUsers();
     }
 
