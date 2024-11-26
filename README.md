@@ -19,4 +19,5 @@ The instructions for how this Rest Api was built can be found in this [page](htt
 - Elastic Beanstalk
 - S3
 - Elastic load balancer
-- CloudFront 
+- CloudFront
+- RDS
