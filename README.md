@@ -13,6 +13,7 @@ The instructions for how this Rest Api was built can be found in this [page](htt
 - Spring Boot
 - JUnit
 - Gradle
+- Shell
 - MySQL
 - Git
 - GitHub
